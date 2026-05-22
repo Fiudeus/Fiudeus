@@ -13,6 +13,11 @@
 ![PySide6](https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1f1f1f?style=for-the-badge&logo=sqlalchemy)
 
+## 📊 Data & Analysis
+
+![NumPy](https://img.shields.io/badge/NumPy-1f1f1f?style=for-the-badge&logo=numpy)
+![Pandas](https://img.shields.io/badge/Pandas-1f1f1f?style=for-the-badge&logo=pandas)
+
 ## 🗄️ Databases
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-1f1f1f?style=for-the-badge&logo=postgresql)
@@ -28,9 +33,8 @@
 
 ![C++](https://img.shields.io/badge/C++-1f1f1f?style=for-the-badge&logo=cplusplus)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1f1f1f?style=for-the-badge&logo=kotlin)
-![HTML5](https://img.shields.io/badge/HTML5-1f1f1f?style=for-the-badge&logo=html5)
-![CSS3](https://img.shields.io/badge/CSS3-1f1f1f?style=for-the-badge&logo=css)
-
+![HTML](https://img.shields.io/badge/HTML-1f1f1f?style=for-the-badge&logo=html5)
+![CSS](https://img.shields.io/badge/CSS-1f1f1f?style=for-the-badge&logo=css)
 ---
 
 ## 🎯 Currently Learning
