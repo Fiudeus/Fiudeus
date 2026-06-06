@@ -26,6 +26,7 @@
 ## 🛠️ Environment & Tools
 
 ![Git](https://img.shields.io/badge/Git-1f1f1f?style=for-the-badge&logo=git)
+![Git](https://img.shields.io/badge/Docker-1f1f1f?style=for-the-badge&logo=Docker)
 ![Linux](https://img.shields.io/badge/Linux-1f1f1f?style=for-the-badge&logo=linux)
 ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1f1f1f?style=for-the-badge&logo=arch-linux)
 
