@@ -21,6 +21,7 @@
 ## 🗄️ Databases
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-1f1f1f?style=for-the-badge&logo=postgresql)
+![ClickHouse](https://img.shields.io/badge/ClickHouse-1f1f1f?style=for-the-badge&logo=clickhouse)
 ![SQLite](https://img.shields.io/badge/SQLite-1f1f1f?style=for-the-badge&logo=sqlite)
 
 ## 🛠️ Environment & Tools
