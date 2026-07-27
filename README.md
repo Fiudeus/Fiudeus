@@ -18,10 +18,10 @@
 ![NumPy](https://img.shields.io/badge/NumPy-1f1f1f?style=for-the-badge&logo=numpy)
 ![Pandas](https://img.shields.io/badge/Pandas-1f1f1f?style=for-the-badge&logo=pandas)
 ![Matplotlib](https://img.shields.io/badge/Matplotlib-1f1f1f?style=for-the-badge&logoUrl=https://raw.githubusercontent.com/Fiudeus/Fiudeus/main/assets/matplotlib.svg)
-![Scikit-learn](https://img.shields.io/badge/scikit--learn-1f1f1f?style=for-the-badge&logo=scikitlearn)
 
 ## 🔬 Machine Learning
 
+![Scikit-learn](https://img.shields.io/badge/scikit--learn-1f1f1f?style=for-the-badge&logo=scikitlearn)
 ![CatBoost](https://img.shields.io/badge/CatBoost-1f1f1f?style=for-the-badge)
 ![XGBoost](https://img.shields.io/badge/XGBoost-1f1f1f?style=for-the-badge)
 
