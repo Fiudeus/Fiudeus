@@ -7,44 +7,53 @@
 
 ---
 
-## 🐍 Core Stack
+## 🌐 Languages
 
 ![Python](https://img.shields.io/badge/Python-1f1f1f?style=for-the-badge&logo=python)
-![PySide6](https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1f1f1f?style=for-the-badge&logo=sqlalchemy)
+![SQL](https://custom-icon-badges.demolab.com/badge/SQL-1f1f1f?style=for-the-badge&logo=database&logoColor=fff)
+![Bash](https://img.shields.io/badge/Bash-1f1f1f?style=for-the-badge&logo=gnubash)
+![C++](https://img.shields.io/badge/C++-1f1f1f?style=for-the-badge&logo=cplusplus)
 
-## 📊 Data Science
+## 📊 Data Analysis
 
 ![NumPy](https://img.shields.io/badge/NumPy-1f1f1f?style=for-the-badge&logo=numpy)
 ![Pandas](https://img.shields.io/badge/Pandas-1f1f1f?style=for-the-badge&logo=pandas)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-1f1f1f?style=for-the-badge&logoUrl=https://raw.githubusercontent.com/Fiudeus/Fiudeus/main/assets/matplotlib.svg)
+![SciPy](https://img.shields.io/badge/Scipy-1f1f1f?style=for-the-badge&logo=scipy)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-1f1f1f?style=for-the-badge&logo=matplotlib)
+![Seaborn](https://custom-icon-badges.demolab.com/badge/Seaborn-1f1f1f?style=for-the-badge&logo=seaborn&logoColor=fff)
+![Plotly](https://img.shields.io/badge/Plotly-1f1f1f?style=for-the-badge&logo=plotly)
 
 ## 🔬 Machine Learning
 
 ![Scikit-learn](https://img.shields.io/badge/scikit--learn-1f1f1f?style=for-the-badge&logo=scikitlearn)
-![CatBoost](https://img.shields.io/badge/CatBoost-1f1f1f?style=for-the-badge)
+![CatBoost](https://custom-icon-badges.demolab.com/badge/CatBoost-1f1f1f?style=for-the-badge&logo=catboost)
 ![XGBoost](https://img.shields.io/badge/XGBoost-1f1f1f?style=for-the-badge)
 
-## 🗄️ Databases
+## 🗄 Databases
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-1f1f1f?style=for-the-badge&logo=postgresql)
 ![ClickHouse](https://img.shields.io/badge/ClickHouse-1f1f1f?style=for-the-badge&logo=clickhouse)
 ![SQLite](https://img.shields.io/badge/SQLite-1f1f1f?style=for-the-badge&logo=sqlite)
 
-## 🛠️ Environment & Tools
+## ⚙️ Development
+
+![PySide6](https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1f1f1f?style=for-the-badge&logo=sqlalchemy)
+
+## 🛠 Tools & Environment
 
 ![Git](https://img.shields.io/badge/Git-1f1f1f?style=for-the-badge&logo=git)
-![Docker](https://img.shields.io/badge/Docker-1f1f1f?style=for-the-badge&logo=Docker)
+![Docker](https://img.shields.io/badge/Docker-1f1f1f?style=for-the-badge&logo=docker)
 ![Linux](https://img.shields.io/badge/Linux-1f1f1f?style=for-the-badge&logo=linux)
-![Arch Linux](https://img.shields.io/badge/Arch_Linux-1f1f1f?style=for-the-badge&logo=arch-linux)
 
-## 📚 Additional Knowledge
+## 📚 Familiar with
 
-![C++](https://img.shields.io/badge/C++-1f1f1f?style=for-the-badge&logo=cplusplus)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1f1f1f?style=for-the-badge&logo=kotlin)
 ![HTML](https://img.shields.io/badge/HTML-1f1f1f?style=for-the-badge&logo=html5)
 ![CSS](https://img.shields.io/badge/CSS-1f1f1f?style=for-the-badge&logo=css)
+
 ---
+
 
 ## 🎯 Currently Learning
 
