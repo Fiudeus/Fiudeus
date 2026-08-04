@@ -7,7 +7,7 @@
 
 ---
 
-## 🌐 Languages
+## 💻 Languages
 
 ![Python](https://img.shields.io/badge/Python-1f1f1f?style=for-the-badge&logo=python)
 ![SQL](https://custom-icon-badges.demolab.com/badge/SQL-1f1f1f?style=for-the-badge&logo=database&logoColor=fff)
