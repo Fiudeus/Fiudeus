@@ -37,8 +37,10 @@
 
 ## ⚙️ Development
 
-![PySide6](https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt)
+![FastAPI](https://img.shields.io/badge/FastAPI-1f1f1f?style=for-the-badge&logo=fastapi)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1f1f1f?style=for-the-badge&logo=sqlalchemy)
+![PySide6](https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt)
+![pytest](https://img.shields.io/badge/pytest-1f1f1f?style=for-the-badge&logo=pytest)
 
 ## 🛠 Tools & Environment
 
