@@ -1,7 +1,7 @@
 # Hi, I'm Artem.
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&duration=3000&pause=1000&color=a47bd7&center=true&vCenter=true&width=600&lines=Applied+AI+student;Python+Developer;Desktop+Applications;Arch+Linux+User" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&duration=3000&pause=1000&color=a47bd7&center=true&vCenter=true&width=600&lines=Applied+AI+student;Python+Developer;Desktop+Applications;Milord+ML+Engineer;Arch+Linux+User" />
 </p>
 
 
