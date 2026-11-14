@@ -1,0 +1,27 @@
+Fiudeus@github ~ $ tree ~/toolbox --noreport
+
+~/toolbox/
+┌─ Languages ──────────────────────────────┐    ┌─ Data Analysis ──────────────────────────┐
+│    Python              Java              │    │    NumPy               Pandas            │
+│    C++                 SQL               │    │    SciPy               Matplotlib        │
+│    Bash                                  │    │    Seaborn             Plotly            │
+└──────────────────────────────────────────┘    └──────────────────────────────────────────┘
+
+┌─ Machine Learning ───────────────────────┐    ┌─ Databases ──────────────────────────────┐
+│    Scikit-learn        CatBoost          │    │    PostgreSQL          ClickHouse        │
+│    XGBoost                               │    │    SQLite                                │
+└──────────────────────────────────────────┘    └──────────────────────────────────────────┘
+
+┌─ Development ────────────────────────────┐    ┌─ Tools & Environment ────────────────────┐
+│    FastAPI             SQLAlchemy        │    │    Git                 Docker            │
+│    PySide6             pytest            │    │    Linux                                 │
+└──────────────────────────────────────────┘    └──────────────────────────────────────────┘
+
+┌─ Familiar with ──────────────────────────┐
+│    Kotlin              HTML              │
+│    CSS                                   │
+└──────────────────────────────────────────┘
+
+Currently Learning
+  Backend development / Algorithms & Data Structures / System Design / Big Data
+  AI/LLM Engineering / Deep learning / Mathematics

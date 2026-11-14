@@ -1,0 +1,89 @@
+# Text is plain Unicode. Each scene uses terminal cells, not HTML layout.
+[profile]
+github = "Fiudeus"
+user = "Fiudeus"
+name = "Artem"
+banner = "FIUDEUS"
+banner_font = "ansi_shadow"
+role = "Data Scientist"
+study = "Applied AI student"
+campus = "Kursk State University"
+focus = "ML / data / desktop / Linux"
+hello = "Hello, I'm Artem."
+activity_label = "Last public activity"
+
+[terminal]
+title = "Fiudeus@github: ~/profile"
+shell = "zsh"
+banner_spacing = 1
+font_size = 15
+line_height = 23
+desktop_cols = 92
+compact_cols = 54
+motion = true
+
+[windows]
+home = "Fiudeus@github: ~ — zsh"
+fastfetch = "fastfetch"
+toolbox = "~/toolbox"
+
+[commands]
+welcome = "cat welcome.ans"
+about = "fastfetch --logo none"
+toolbox = "tree ~/toolbox --noreport"
+
+[toolbox]
+style = "panels"
+categories = [
+  ["Languages", "Python / Java / C++ / SQL / Bash"],
+  ["Data Analysis", "NumPy / Pandas / SciPy / Matplotlib / Seaborn / Plotly"],
+  ["Machine Learning", "Scikit-learn / CatBoost / XGBoost"],
+  ["Databases", "PostgreSQL / ClickHouse / SQLite"],
+  ["Development", "FastAPI / SQLAlchemy / PySide6 / pytest"],
+  ["Tools & Environment", "Git / Docker / Linux"],
+  ["Familiar with", "Kotlin / HTML / CSS"],
+]
+learning_title = "Currently Learning"
+learning = ["Backend development", "Algorithms & Data Structures", "System Design", "Big Data", "AI/LLM Engineering", "Deep learning", "Mathematics"]
+
+[github]
+exclude_repos = ["Fiudeus", "LuminaRead"]
+snapshot = "data/github.json"
+
+[themes.dark]
+base = "#1e1e2e"
+chrome = "#181825"
+border = "#36364a"
+text = "#cdd6f4"
+muted = "#a6adc8"
+dim = "#8c91ab"
+lavender = "#cba6f7"
+pale = "#b4befe"
+red = "#f38ba8"
+soft_red = "#eba0ac"
+pink = "#f5c2e7"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+banner = ["#b4befe", "#bcaef9", "#cba6f7", "#d9a6ed", "#e6a5dc", "#efa0c8", "#f59ab8", "#f38ba8"]
+heat0 = "#585b70"
+badge_lavender = "#302b43"
+badge_red = "#3d2b3d"
+
+[themes.light]
+base = "#f4f2f8"
+chrome = "#e9e5f0"
+border = "#ccc5dc"
+text = "#39364d"
+muted = "#625c78"
+dim = "#756d88"
+lavender = "#7542a6"
+pale = "#5553a1"
+red = "#ad3159"
+soft_red = "#9e4666"
+pink = "#a33b86"
+yellow = "#df8e1d"
+green = "#40a02b"
+banner = ["#5553a1", "#644aad", "#7542a6", "#873d9c", "#963b8b", "#a73777", "#b23365", "#ad3159"]
+heat0 = "#b7afc8"
+badge_lavender = "#e6def2"
+badge_red = "#f0dfe9"

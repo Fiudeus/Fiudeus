@@ -1,0 +1,220 @@
+name: Terminal profile
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'
+
+# Ordinary CI and refresh builds cannot write repository contents.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PYTHONUNBUFFERED: '1'
+
+jobs:
+  build:
+    name: Validate and build artifacts
+    if: >-
+      (github.event_name != 'schedule' && github.event_name != 'workflow_dispatch') ||
+      github.repository == 'Fiudeus/Fiudeus'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+
+      - name: Install development dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate checked-in profile
+        run: python -m scripts.validate
+
+      - name: Prepare isolated build
+        env:
+          PROFILE_BUILD_DIR: ${{ runner.temp }}/profile-build
+        run: |
+          mkdir -p "$PROFILE_BUILD_DIR/data"
+          cp data/github.json "$PROFILE_BUILD_DIR/data/github.json"
+          echo "PROFILE_BUILD_DIR=$PROFILE_BUILD_DIR" >> "$GITHUB_ENV"
+
+      - name: Generate from checked-in snapshot
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: >-
+          python -m scripts.generate
+          --snapshot "$PROFILE_BUILD_DIR/data/github.json"
+          --out "$PROFILE_BUILD_DIR"
+
+      - name: Refresh real public GitHub data
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m scripts.generate --refresh
+          --snapshot "$PROFILE_BUILD_DIR/data/github.json"
+          --out "$PROFILE_BUILD_DIR"
+
+      - name: Validate generated profile
+        run: python -m scripts.validate --root "$PROFILE_BUILD_DIR"
+
+      - name: Check reproducible offline output
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: |
+          git diff --no-index -- README.md "$PROFILE_BUILD_DIR/README.md"
+          git diff --no-index -- profile "$PROFILE_BUILD_DIR/profile"
+          git diff --no-index -- previews/index.html "$PROFILE_BUILD_DIR/previews/index.html"
+          git diff --no-index -- previews/text "$PROFILE_BUILD_DIR/previews/text"
+          git diff --no-index -- previews/toolbox "$PROFILE_BUILD_DIR/previews/toolbox"
+          git diff --no-index -- previews/toolbox-variants.html "$PROFILE_BUILD_DIR/previews/toolbox-variants.html"
+
+      - name: Upload reviewable profile
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: terminal-profile-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/profile-build/profile/
+            ${{ runner.temp }}/profile-build/README.md
+            ${{ runner.temp }}/profile-build/data/github.json
+            ${{ runner.temp }}/profile-build/previews/index.html
+            ${{ runner.temp }}/profile-build/previews/text/
+            ${{ runner.temp }}/profile-build/previews/toolbox/*.svg
+            ${{ runner.temp }}/profile-build/previews/toolbox-variants.html
+
+  # Refreshes publish automatically after this workflow reaches the default branch.
+  # Design branches, PRs and ordinary pushes only build reviewable artifacts.
+  publish:
+    name: Publish default-branch refresh
+    needs: build
+    if: >-
+      needs.build.result == 'success' &&
+      github.repository == 'Fiudeus/Fiudeus' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') &&
+      github.ref_type == 'branch' &&
+      github.ref_name == github.event.repository.default_branch &&
+      github.ref_name != 'design/profile-terminal-2026'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      EXPECTED_SHA: ${{ github.sha }}
+      TARGET_BRANCH: ${{ github.ref_name }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: Check out the exact validated commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          clean: false
+
+      - name: Verify branch and untouched checkout
+        run: |
+          test "$TARGET_BRANCH" = "$DEFAULT_BRANCH"
+          git check-ref-format "refs/heads/$TARGET_BRANCH"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          remote_sha="$(git ls-remote --exit-code origin "refs/heads/$TARGET_BRANCH" | cut -f 1)"
+          test "$remote_sha" = "$EXPECTED_SHA"
+
+      - name: Download this run's validated artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: terminal-profile-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/profile-artifact
+
+      - name: Stage only generated profile files
+        id: stage
+        env:
+          PROFILE_ARTIFACT_DIR: ${{ runner.temp }}/profile-artifact
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import shutil
+          import subprocess
+
+          artifact = Path(os.environ['PROFILE_ARTIFACT_DIR'])
+          scenes = ('session', 'fastfetch', 'toolbox')
+          allowed = {'README.md', 'data/github.json', 'previews/index.html', 'previews/toolbox-variants.html'}
+          allowed.update(f'previews/text/{scene}.txt' for scene in scenes)
+          allowed.update(f'profile/{scene}{width}-{theme}.svg' for scene in scenes
+                         for width in ('', '-compact') for theme in ('dark', 'light'))
+          allowed.update(f'profile/session{width}-still-{theme}.svg'
+                         for width in ('', '-compact') for theme in ('dark', 'light'))
+          allowed.update(f'previews/toolbox/{style}{width}-{theme}.svg' for style in ('tree', 'badges', 'panels')
+                         for width in ('', '-compact') for theme in ('dark', 'light'))
+          entries = list(artifact.rglob('*'))
+          if any(path.is_symlink() for path in entries):
+              raise SystemExit('Artifact contains a symlink; refusing to publish')
+          actual = {path.relative_to(artifact).as_posix() for path in entries if path.is_file()}
+          if actual != allowed:
+              raise SystemExit('Artifact does not match the exact generated-file allowlist')
+          for name in sorted(allowed):
+              destination = Path(name)
+              if any(path.is_symlink() for path in (destination, *destination.parents)):
+                  raise SystemExit(f'Refusing to replace a symlink: {name}')
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(artifact / name, destination)
+          status = subprocess.check_output(
+              ['git', 'status', '--porcelain=v1', '-z', '--untracked-files=all'])
+          for entry in status.split(b'\0'):
+              if entry and (entry[:2] not in (b' M', b'??') or os.fsdecode(entry[3:]) not in allowed):
+                  raise SystemExit('Unrelated checkout change detected; refusing to commit')
+          subprocess.run(['git', 'add', '--', *sorted(allowed)], check=True)
+          PY
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          else
+            git diff --cached --check
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push to the same verified branch
+        if: steps.stage.outputs.changed == 'true'
+        env:
+          PROFILE_PUSH_TOKEN: ${{ github.token }}
+        run: |
+          # A moved branch fails safely. Never reset, rebase or force-push.
+          remote_sha="$(git ls-remote --exit-code origin "refs/heads/$TARGET_BRANCH" | cut -f 1)"
+          test "$remote_sha" = "$EXPECTED_SHA"
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -c core.hooksPath=/dev/null commit -m 'chore(profile): refresh public GitHub data [skip ci]'
+          askpass="$RUNNER_TEMP/profile-git-askpass.sh"
+          cat > "$askpass" <<'SH'
+          #!/usr/bin/env bash
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "$PROFILE_PUSH_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SH
+          chmod 700 "$askpass"
+          export GIT_ASKPASS="$askpass" GIT_TERMINAL_PROMPT=0
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"

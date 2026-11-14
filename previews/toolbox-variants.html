@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fiudeus / toolbox variants</title><style>
+:root{color-scheme:dark;background:#0d1117;color:#cdd6f4;font:13px ui-monospace,monospace}
+:root[data-theme=light]{color-scheme:light;background:#fff;color:#39364d}body{padding:24px;margin:0}
+header,main{max-width:900px;margin:auto}header{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:24px}
+select{font:inherit;padding:5px;background:transparent;color:inherit;border:1px solid #7f849c}a{color:inherit}
+main.compact{max-width:540px}h2{font-size:14px;font-weight:400;margin:24px 8px 8px}p{margin:8px;line-height:1.7;color:#a6adc8}
+img{display:block;width:100%;height:auto}section{margin-bottom:32px}@media(max-width:600px){body{padding:12px}}
+</style><header><span>~/toolbox / compare</span><label>theme <select id="theme"><option>dark</option><option>light</option></select></label>
+<label>layout <select id="layout"><option>desktop</option><option>compact</option><option>auto</option></select></label><a href="index.html">Full profile</a></header>
+<main></main><script>
+const params=new URLSearchParams(location.search),theme=document.querySelector('#theme'),layout=document.querySelector('#layout');
+theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'auto';
+function render(){const compact=layout.value==='compact'||(layout.value==='auto'&&innerWidth<=600),mode=theme.value;
+document.documentElement.dataset.theme=mode;const main=document.querySelector('main');main.className=compact?'compact':'';
+main.replaceChildren(...[['tree','01 / Tree'],['badges','02 / ANSI badges + original logos'],['panels','03 / TUI panels + original logos']].map(([style,title])=>{
+const section=document.createElement('section'),h=document.createElement('h2'),img=document.createElement('img');h.textContent=title;
+img.src='toolbox/'+style+(compact?'-compact':'')+'-'+mode+'.svg';img.alt=style+' toolbox';section.append(h,img);return section;}));}
+theme.onchange=render;layout.onchange=render;window.onresize=render;render();
+</script></html>
