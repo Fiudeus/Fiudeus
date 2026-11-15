@@ -39,7 +39,7 @@ Edit text, commands, complete stack, learning topics and palettes in `config.tom
 
 `toolbox.style = "panels"` is the selected default. The `tree` and `badges` alternatives remain available in the local preview selector and [comparison page](../previews/toolbox-variants.html). The selector previews without editing configuration. Every variant retains the same full stack. Currently Learning preserves the original five topics and adds the user's Deep learning and Mathematics.
 
-Desktop: 900px, 92 cells, 15px text and 23px row pitch. Compact: 540px, 54 cells, selected at a 600px viewport. Bounds and fastfetch subcolumns are checked before output is written.
+The profile README always uses the 900px, 92-cell composition with 15px text and 23px row pitch. Theme and motion preferences select images, while viewport width never switches to a different layout. GitHub scales the image down to fit its column. This keeps the same composition in profile and repository views, including with a narrow logical viewport or increased display scaling. The local viewer defaults to desktop; 540px/54-cell compact layouts remain available through its explicit compact/auto controls. Bounds and fastfetch subcolumns are checked before output is written.
 
 ## Architecture
 
@@ -79,7 +79,7 @@ Required metadata/language failures stop refresh. Optional unavailable metrics s
 
 ## Motion and QA
 
-The opening command types once; output and the next prompt appear in sequence. The resting cursor blinks every 1.25 seconds. All complete states are CSS defaults. `prefers-reduced-motion: reduce` disables every animation; `--static` emits complete static images. README picture sources and the local preview also choose four dedicated still home variants (theme × width), avoiding browser inconsistencies with media preferences inside external SVG images. Generation writes 16 profile SVGs plus 12 toolbox comparisons, 28 total; the README has 16 local resource references. Metrics never animate.
+The opening command types once; output and the next prompt appear in sequence. The resting cursor blinks every 1.25 seconds. All complete states are CSS defaults. `prefers-reduced-motion: reduce` disables every animation; `--static` emits complete static images. Four dedicated still home variants are generated (theme × width): the README uses the two wide variants, and the local viewer can use either width. This avoids browser inconsistencies with media preferences inside external SVG images. Generation writes 16 profile SVGs plus 12 toolbox comparisons, 28 total; the README has eight wide resource references. Metrics never animate.
 
 Optional rendering tools:
 
@@ -91,7 +91,7 @@ node scripts/render.mjs
 node scripts/browser-qa.mjs
 ```
 
-An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. It also checks actual sharp/librsvg pixels: the seven panel bottoms and sides must remain visible across 20 theme/layout/scale combinations, including the 840px case that previously lost strokes. Box-drawing uses a non-scaling one-pixel stroke so `crispEdges` cannot round a reduced stroke away. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
+An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. It verifies that all README images keep their natural 900px width at 900px/DPR 1, 600px/DPR 1.5 and 375px/DPR 1, in both themes and motion modes. Still-image comparisons require identical pixels at integer DPR; fractional DPR allows only a one-unit per-channel rounding difference. It also checks actual sharp/librsvg pixels: the seven panel bottoms and sides must remain visible across 20 theme/layout/scale combinations, including the 840px case that previously lost strokes. Box-drawing uses a non-scaling one-pixel stroke so `crispEdges` cannot round a reduced stroke away. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
 
 ## Automation and GitHub limits
 

@@ -7,7 +7,7 @@ Local verification on 2026-11-14, branch `design/profile-terminal-2026`, against
 | Check | Observed result |
 | --- | --- |
 | Unit suite | 66 passed: 42 stats, 13 generation, 8 renderer, 3 original-logo tests |
-| Generation/validation | 16 profile SVGs (including four still home variants) + 12 toolbox comparison SVGs; all XML, internal references, cell bounds, reduced-motion defaults, size budgets and 16 README image paths valid |
+| Generation/validation | 16 profile SVGs (including four still home variants) + 12 toolbox comparison SVGs; all XML, internal references, cell bounds, reduced-motion defaults, size budgets and eight wide README image paths valid |
 | Reproducibility | 34 generated files byte-identical in an independent output directory |
 | Static mode | Complete static variants generated and validated |
 | Real refresh | Full tokenless production fetch succeeded with verified TLS; schema-2 snapshot atomically saved; previous schema-1 snapshot backed up locally |
@@ -44,3 +44,11 @@ At the time of the local verification recorded here, hosted Actions execution ha
 The reported missing `Familiar with` bottom border was reproduced with sharp/librsvg when rendering the 900px SVG at 840px. The SVG paths existed and Chromium's ordinary geometry checks passed, but a 1.05-unit `crispEdges` stroke scaled below one pixel and vanished during rasterization. Other frame edges could disappear for the same reason.
 
 Procedural single-line box drawing now uses `stroke-width="1"` and `vector-effect="non-scaling-stroke"`, retaining crisp edges and the original cell geometry. The new pixel regression first failed against the original output (zero bottom-border pixels at 840px), then passed after regeneration. It checks the bottoms and both sides of all seven panels in 20 dark/light desktop/compact width cases. The 66 Python tests, 28-SVG validation, existing browser/motion checks and offline reproducibility also pass. The corrected `Familiar with` frame was visually inspected in both themes at the failing scale. No profile data or content was changed.
+
+## Profile layout selection, 2026-11-15
+
+The original README selected 540px compact SVGs at `max-width: 600px`. A narrow logical viewport with a higher display scale could therefore show the long, large-letter composition on a physically large profile card. The exact behavior was reproduced on the public GitHub profile at 600px/DPR 1.5: the first image used a 540px source and fastfetch/toolbox were stacked vertically.
+
+README sources now always select the 900px composition, with only theme and motion alternatives; compact layouts remain local preview options. The new regression first failed on the old compact source, then passed for all 12 theme/motion/viewport combinations, including 600px/DPR 1.5. All 66 Python tests and 28-SVG validation pass. Static frame comparisons remain exact at integer DPR and allow a maximum per-channel difference of 1/255 at fractional DPR, where 12 static channel values were observed to round by one unit.
+
+The local README was also previewed in the actual public GitHub profile and repository DOM at 1440px/DPR 1 and 600px/DPR 1.5, without changing repository/account state. All three images retained 900px natural width and the wide composition in both hosts. At the narrow profile width, fastfetch's rendered height fell from 565.95px to 233.67px and the toolbox from 1294.03px to 405.77px. This was a browser-only preview; it did not deploy the change to main.
