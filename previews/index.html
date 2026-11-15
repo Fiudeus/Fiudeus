@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fiudeus / terminal preview</title>
+<style>
+:root{color-scheme:dark;background:#0d1117;color:#cdd6f4;font:13px ui-monospace,monospace}
+:root[data-theme=light]{color-scheme:light;background:#fff;color:#39364d}
+body{margin:0;padding:24px}header{max-width:900px;margin:0 auto 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+label{display:flex;gap:8px;align-items:center}select{font:inherit;padding:5px;border:1px solid #7f849c;background:transparent;color:inherit}
+main{max-width:900px;margin:auto;display:grid;gap:16px}main.compact{max-width:540px}img{display:block;width:100%;height:auto}
+a{color:inherit}footer{max-width:900px;margin:24px auto;line-height:1.8}body:has(main.compact) footer{max-width:540px}
+@media(max-width:600px){body{padding:12px}main{gap:12px}}
+</style>
+<header><span>~/Fiudeus / preview</span><label>theme <select id="theme"><option>dark</option><option>light</option><option>system</option></select></label>
+<label>layout <select id="layout"><option>desktop</option><option>compact</option><option>auto</option></select></label>
+<label>toolbox <select id="toolbox"><option value="saved">saved</option><option>tree</option><option>badges</option><option>panels</option></select></label>
+<a href="toolbox-variants.html">Compare toolbox</a>
+<a href="../README.md">README source</a></header>
+<main id="scenes"></main>
+<footer>Motion follows <code>prefers-reduced-motion</code>. Fonts are outlined, no CDN needed.<br>
+The calendar is GitHub's own contribution graph; the profile does not duplicate it.</footer>
+<script>
+const theme=document.querySelector('#theme'), layout=document.querySelector('#layout'),toolbox=document.querySelector('#toolbox');
+const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'auto';
+toolbox.value=params.get('toolbox')||'saved';
+function render(){const dark=theme.value==='dark'||(theme.value==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+const compact=layout.value==='compact'||(layout.value==='auto'&&innerWidth<=600);
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.documentElement.dataset.theme=dark?'dark':'light';const main=document.querySelector('main');main.className=compact?'compact':'';
+main.replaceChildren(...['session','fastfetch','toolbox'].map(name=>{const img=document.createElement('img');
+img.src=name==='toolbox'&&toolbox.value!=='saved'?'toolbox/'+toolbox.value+(compact?'-compact':'')+'-'+(dark?'dark':'light')+'.svg':'../profile/'+name+(compact?'-compact':'')+(name==='session'&&still?'-still':'')+'-'+(dark?'dark':'light')+'.svg';img.alt=name;img.dataset.scene=name;return img;}));}
+theme.onchange=render;layout.onchange=render;toolbox.onchange=render;window.onresize=render;render();
+for(const query of ['(prefers-reduced-motion: reduce)','(prefers-color-scheme: dark)'])matchMedia(query).addEventListener('change',render);
+</script></html>

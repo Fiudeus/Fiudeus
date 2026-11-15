@@ -1,0 +1,193 @@
+{
+  "Python": {
+    "badge_source": "https://img.shields.io/badge/Python-1f1f1f?style=for-the-badge&logo=python",
+    "char": "",
+    "format": "svg",
+    "file": "python.svg",
+    "sha256": "85f1bb62ecd0d978e82bfac40ce15e1ee7822ad4f74f9215d73661f3865c1e78"
+  },
+  "SQL": {
+    "badge_source": "https://custom-icon-badges.demolab.com/badge/SQL-1f1f1f?style=for-the-badge&logo=database&logoColor=fff",
+    "char": "",
+    "format": "svg",
+    "file": "sql.svg",
+    "sha256": "fa1b1f081ff80fe51c097236fd6a0814656ebfd52fe69c5ca141918faf9002c2"
+  },
+  "Bash": {
+    "badge_source": "https://img.shields.io/badge/Bash-1f1f1f?style=for-the-badge&logo=gnubash",
+    "char": "",
+    "format": "svg",
+    "file": "bash.svg",
+    "sha256": "d5bdfe3c67a2baf479b60e2e9a588b7882bad378d707545c0b8f2321f01faaff"
+  },
+  "C++": {
+    "badge_source": "https://img.shields.io/badge/C++-1f1f1f?style=for-the-badge&logo=cplusplus",
+    "char": "",
+    "format": "svg",
+    "file": "c.svg",
+    "sha256": "2afca94435c9cbf599b6827c7d152a14a6d8ce1e9024ab30a3d2a94f525edb29"
+  },
+  "NumPy": {
+    "badge_source": "https://img.shields.io/badge/NumPy-1f1f1f?style=for-the-badge&logo=numpy",
+    "char": "",
+    "format": "svg",
+    "file": "numpy.svg",
+    "sha256": "e4b05556de1f7a049f335337b43140f68b3775bdcb22e27699e4757db0e68f8d"
+  },
+  "Pandas": {
+    "badge_source": "https://img.shields.io/badge/Pandas-1f1f1f?style=for-the-badge&logo=pandas",
+    "char": "",
+    "format": "svg",
+    "file": "pandas.svg",
+    "sha256": "c855f0dd4f221c082c24a840e40dd59f5347ab6d7fb8b9c136567f0b6670d31f"
+  },
+  "SciPy": {
+    "badge_source": "https://img.shields.io/badge/Scipy-1f1f1f?style=for-the-badge&logo=scipy",
+    "char": "󰡱",
+    "format": "svg",
+    "file": "scipy.svg",
+    "sha256": "eed738f35737f1a3e2a50882305ff14523c60325125e15f73ba11360c54e9c3f"
+  },
+  "Matplotlib": {
+    "badge_source": "https://img.shields.io/badge/Matplotlib-1f1f1f?style=for-the-badge&logo=matplotlib",
+    "char": "",
+    "format": "svg",
+    "file": "matplotlib.svg",
+    "icon_source": "repository:assets/matplotlib.svg",
+    "sha256": "c93696650c82f3c87b0c7228b501187feab0c10326249ffa1ea8b4c196e57f1b"
+  },
+  "Seaborn": {
+    "badge_source": "https://custom-icon-badges.demolab.com/badge/Seaborn-1f1f1f?style=for-the-badge&logo=seaborn&logoColor=fff",
+    "char": "󰺒",
+    "format": "png",
+    "file": "seaborn.png",
+    "sha256": "e5dac0c9cd20062eb023c7ad16c120d8ccb751bc8bcf2d4d61df73b011761772"
+  },
+  "Plotly": {
+    "badge_source": "https://img.shields.io/badge/Plotly-1f1f1f?style=for-the-badge&logo=plotly",
+    "char": "",
+    "format": "svg",
+    "file": "plotly.svg",
+    "sha256": "69239eed022f4fb3198cece3b29a338b880a77751d92ac2c098f3283c85b6560"
+  },
+  "Scikit-learn": {
+    "badge_source": "https://img.shields.io/badge/scikit--learn-1f1f1f?style=for-the-badge&logo=scikitlearn",
+    "char": "",
+    "format": "svg",
+    "file": "scikit-learn.svg",
+    "sha256": "422acd1156f9cf98d6f31dd5d743aa02f452a3f0e092309bdda36d468575fc53"
+  },
+  "CatBoost": {
+    "badge_source": "https://custom-icon-badges.demolab.com/badge/CatBoost-1f1f1f?style=for-the-badge&logo=catboost",
+    "char": "󰄛",
+    "format": "svg",
+    "file": "catboost.svg",
+    "sha256": "a9313426ceac656832a0d7fe9be423eae2c96b9b3d4c1c902aa747c8365649e7"
+  },
+  "XGBoost": {
+    "badge_source": "https://img.shields.io/badge/XGBoost-1f1f1f?style=for-the-badge",
+    "char": null,
+    "format": "none",
+    "file": null
+  },
+  "PostgreSQL": {
+    "badge_source": "https://img.shields.io/badge/PostgreSQL-1f1f1f?style=for-the-badge&logo=postgresql",
+    "char": "",
+    "format": "svg",
+    "file": "postgresql.svg",
+    "sha256": "bc45b1c56d0b1501dea387dbec4fda450d2ebc35244a620791815509d8c41dba"
+  },
+  "ClickHouse": {
+    "badge_source": "https://img.shields.io/badge/ClickHouse-1f1f1f?style=for-the-badge&logo=clickhouse",
+    "char": "",
+    "format": "svg",
+    "file": "clickhouse.svg",
+    "sha256": "56b721320616172170bb817a949dd88f71a52254b07caeec6589d0ff9d363cb5"
+  },
+  "SQLite": {
+    "badge_source": "https://img.shields.io/badge/SQLite-1f1f1f?style=for-the-badge&logo=sqlite",
+    "char": "",
+    "format": "svg",
+    "file": "sqlite.svg",
+    "sha256": "b87ac989614b175ec55f3e6819ddcfd1ac93cb04543bdb950e3194aac4d7c850"
+  },
+  "FastAPI": {
+    "badge_source": "https://img.shields.io/badge/FastAPI-1f1f1f?style=for-the-badge&logo=fastapi",
+    "char": "",
+    "format": "svg",
+    "file": "fastapi.svg",
+    "sha256": "faca76e57b2cb4164d3a51d680ce014fd925c7c96a993f2fafa109386758cad3"
+  },
+  "SQLAlchemy": {
+    "badge_source": "https://img.shields.io/badge/SQLAlchemy-1f1f1f?style=for-the-badge&logo=sqlalchemy",
+    "char": "",
+    "format": "svg",
+    "file": "sqlalchemy.svg",
+    "sha256": "1afeb2fe914bac06395e8a979db02555519dfe1cec8b8389feb91e15528bcae0"
+  },
+  "PySide6": {
+    "badge_source": "https://img.shields.io/badge/PySide6-1f1f1f?style=for-the-badge&logo=qt",
+    "char": "",
+    "format": "svg",
+    "file": "pyside6.svg",
+    "sha256": "83b31ebe6a9f02894ccc9ccd6599ec940fcaa80fb856e95f65b5043b2f7efece"
+  },
+  "pytest": {
+    "badge_source": "https://img.shields.io/badge/pytest-1f1f1f?style=for-the-badge&logo=pytest",
+    "char": "",
+    "format": "svg",
+    "file": "pytest.svg",
+    "sha256": "9673d431bd483e0335bb3275baf5318ea563a2ad9f30a57aba74985af61b0e92"
+  },
+  "Git": {
+    "badge_source": "https://img.shields.io/badge/Git-1f1f1f?style=for-the-badge&logo=git",
+    "char": "",
+    "format": "svg",
+    "file": "git.svg",
+    "sha256": "ae0cc33bc3fc7c29c500c90a029e32f21fdb9297e0b3d59948da27b2607e8a2c"
+  },
+  "Docker": {
+    "badge_source": "https://img.shields.io/badge/Docker-1f1f1f?style=for-the-badge&logo=docker",
+    "char": "",
+    "format": "svg",
+    "file": "docker.svg",
+    "sha256": "ba1fb157870b2ec02e054aed42154ac7418e25af91ec321fd328d17cad4023cd"
+  },
+  "Linux": {
+    "badge_source": "https://img.shields.io/badge/Linux-1f1f1f?style=for-the-badge&logo=linux",
+    "char": "",
+    "format": "svg",
+    "file": "linux.svg",
+    "sha256": "5c3b1603cef1303295aa3f96b738cc5df018ce76642e3f0183b519aed9a18d39"
+  },
+  "Kotlin": {
+    "badge_source": "https://img.shields.io/badge/Kotlin-1f1f1f?style=for-the-badge&logo=kotlin",
+    "char": "",
+    "format": "svg",
+    "file": "kotlin.svg",
+    "sha256": "ee939b647aac2af31b8ecc944ad9e09846e3bf18956e808613b2966289be048b"
+  },
+  "HTML": {
+    "badge_source": "https://img.shields.io/badge/HTML-1f1f1f?style=for-the-badge&logo=html5",
+    "char": "",
+    "format": "svg",
+    "file": "html.svg",
+    "sha256": "6dbc134a2c0ede550ef086cd5ebc5c0af7ddf6c4318d4fe54706aaf6a4e4714e"
+  },
+  "CSS": {
+    "badge_source": "https://img.shields.io/badge/CSS-1f1f1f?style=for-the-badge&logo=css",
+    "char": "",
+    "format": "svg",
+    "file": "css.svg",
+    "sha256": "6fef0415f46288d6b5b76db035986e1b0880f2ce4d3241e01a518a418f50f097"
+  },
+  "Java": {
+    "badge_source": null,
+    "icon_source": "https://github.com/devicons/devicon/blob/v2.17.0/icons/java/java-plain.svg",
+    "char": "",
+    "format": "svg",
+    "file": "java.svg",
+    "sha256": "fd3e26e026eb4d8fb8188d7496259bfa9ec9ef0a1d717ada9dfd70883ee9285a",
+    "license": "LICENSE-devicon.txt"
+  }
+}

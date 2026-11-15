@@ -1,0 +1,4 @@
+fonttools==4.61.1
+wcwidth==0.2.14
+pyfiglet==1.0.4
+truststore==0.10.5
