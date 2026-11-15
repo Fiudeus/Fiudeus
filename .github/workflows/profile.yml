@@ -167,6 +167,9 @@ jobs:
                          for width in ('', '-compact') for theme in ('dark', 'light'))
           allowed.update(f'profile/session{width}-still-{theme}.svg'
                          for width in ('', '-compact') for theme in ('dark', 'light'))
+          allowed.update(f'profile/{separator}-{theme}.svg'
+                         for separator in ('contact-telegram', 'contact-discord', 'contact-vk', 'ansi-palette')
+                         for theme in ('dark', 'light'))
           allowed.update(f'previews/toolbox/{style}{width}-{theme}.svg' for style in ('tree', 'badges', 'panels')
                          for width in ('', '-compact') for theme in ('dark', 'light'))
           entries = list(artifact.rglob('*'))

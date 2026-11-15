@@ -2,6 +2,8 @@
 
 The final profile has three terminal windows: home, fastfetch and toolbox. The user selected the toolbox with Unicode outline panels and the role `Data Scientist`. All seven original GitHub category names and technologies are retained. The user's latest Languages order is **Python, Java, C++, SQL, Bash**, adding Java for 27 technologies overall; other category orders are unchanged. The greeting is one line; native GitHub pins and the contribution graph handle projects and activity. There are no tmux footers, pets, closing windows or project windows.
 
+A centered row of Telegram, Discord and VK contact badges separates home from fastfetch. Eight terminal block samples of the actual banner colors separate fastfetch from toolbox. Both separators stay at their native size while GitHub scales the window images.
+
 ## Local use
 
 Python 3.11+ is required. From the repository root on Windows:
@@ -41,6 +43,8 @@ Edit text, commands, complete stack, learning topics and palettes in `config.tom
 
 The profile README always uses the 900px, 92-cell composition with 15px text and 23px row pitch. Theme and motion preferences select images, while viewport width never switches to a different layout. GitHub scales the image down to fit its column. This keeps the same composition in profile and repository views, including with a narrow logical viewport or increased display scaling. The local viewer defaults to desktop; 540px/54-cell compact layouts remain available through its explicit compact/auto controls. Bounds and fastfetch subcolumns are checked before output is written.
 
+Contact labels, account names, URLs and accent tokens are under `[contacts.telegram]`, `[contacts.discord]` and `[contacts.vk]`. Their README anchors use the configured HTTPS targets; the Discord numeric ID belongs only in its URL. SVGs show service names, with usernames in accessible descriptions and link titles. The three marks are vendored from [Simple Icons](https://github.com/simple-icons/simple-icons/tree/c37b20d397a710fdd402aae3cb643b820b142074/icons), with CC0 text, immutable sources and SHA-256 checksums under `assets/contacts/`. Badge proportions follow [Nyankomintsu's UQ badge](https://github.com/Nyankomintsu/Nyankomintsu/blob/main/assets/badge-uq-light.svg): 28px height, 7px corners, a colored leading segment and 13px bold outlines. The second separator reuses the eight exact `themes.*.banner` colors; edit that array to change the lettering and its palette together. It adds no separate generic ANSI color set.
+
 ## Architecture
 
 | Source | Responsibility |
@@ -49,6 +53,7 @@ The profile README always uses the 900px, 92-cell composition with 15px text and
 | `scripts/svg.py` | Escaped SVG, definition reuse, CSS registry, static/reduced-motion fallback |
 | `scripts/terminal.py` | Unicode text cells, local font outlines, connected symbols, ANSI backgrounds, two-cell logo slots |
 | `scripts/icons.py` | Checksummed original logo assets, theme-colored vector symbols and inline PNG luminance mask |
+| `scripts/badges.py` | Local contact logos, reference-proportioned badges and terminal samples of actual banner inks |
 | `scripts/toolbox.py` | Tree, console badges and Unicode outline panels using the same complete inventory |
 | `scripts/art.py` | Existing FIGlet lettering through pyfiglet |
 | `scripts/motion.py` | One-shot typing, output reveal and cursors |
@@ -60,7 +65,7 @@ The profile README always uses the 900px, 92-cell composition with 15px text and
 
 JetBrains Mono Regular/Bold v2.304 is vendored with OFL and hashes. Only used glyphs are outlined once per SVG and placed with `use`. `wcwidth` determines text width; NFC normalization preserves combining anchors. Unsupported glyphs and controls fail with useful errors.
 
-Logos are copied from the user's actual original badges, with source URLs/checksums under `assets/icons`. Matplotlib uses the existing repository SVG. Java, subsequently added by the user, uses Devicon v2.17.0's coffee-cup mark with its MIT license vendored locally. XGBoost had no badge icon, so no substitute is shown. SVG geometry is retained and paints adapt to the foreground/background of the current terminal cell. Seaborn retains its original PNG bytes, embedded as a data URI and tinted through an SVG luminance mask. Matplotlib's plotting background takes the cell background. No blue/green/orange brand colors break the palette. No runtime font/icon request or CDN is required. Logo slots occupy two cells; a live-terminal equivalent requires inline graphics support. Surrounding layout is ordinary text/pseudographics. Plain-text exports under `previews/text/` replace private icon markers with matching-width spaces and retain every name. The profile README ends after the three terminal images; documentation and transcripts remain repository files.
+Logos are copied from the user's actual original badges, with source URLs/checksums under `assets/icons`. Matplotlib uses the existing repository SVG. Java, subsequently added by the user, uses Devicon v2.17.0's coffee-cup mark with its MIT license vendored locally. XGBoost had no badge icon, so no substitute is shown. SVG geometry is retained and paints adapt to the foreground/background of the current terminal cell. Seaborn retains its original PNG bytes, embedded as a data URI and tinted through an SVG luminance mask. Matplotlib's plotting background takes the cell background. No blue/green/orange brand colors break the palette. No runtime font/icon request or CDN is required. Logo slots occupy two cells; a live-terminal equivalent requires inline graphics support. Surrounding layout is ordinary text/pseudographics. Plain-text exports under `previews/text/` replace private icon markers with matching-width spaces and retain every name. The profile README ends after the toolbox image; documentation and transcripts remain repository files.
 
 ## Statistics
 
@@ -79,7 +84,7 @@ Required metadata/language failures stop refresh. Optional unavailable metrics s
 
 ## Motion and QA
 
-The opening command types once; output and the next prompt appear in sequence. The resting cursor blinks every 1.25 seconds. All complete states are CSS defaults. `prefers-reduced-motion: reduce` disables every animation; `--static` emits complete static images. Four dedicated still home variants are generated (theme × width): the README uses the two wide variants, and the local viewer can use either width. This avoids browser inconsistencies with media preferences inside external SVG images. Generation writes 16 profile SVGs plus 12 toolbox comparisons, 28 total; the README has eight wide resource references. Metrics never animate.
+The opening command types once; output and the next prompt appear in sequence. The resting cursor blinks every 1.25 seconds. All complete states are CSS defaults. `prefers-reduced-motion: reduce` disables every animation; `--static` emits complete static images. Four dedicated still home variants are generated (theme × width): the README uses the two wide variants, and the local viewer can use either width. This avoids browser inconsistencies with media preferences inside external SVG images. Generation writes 24 profile SVGs (16 window variants and eight separators) plus 12 toolbox comparisons, 36 total, and six other files. The README has 16 local resource references. Metrics and separators never animate.
 
 Optional rendering tools:
 
@@ -91,13 +96,13 @@ node scripts/render.mjs
 node scripts/browser-qa.mjs
 ```
 
-An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. It verifies that all README images keep their natural 900px width at 900px/DPR 1, 600px/DPR 1.5 and 375px/DPR 1, in both themes and motion modes. Still-image comparisons require identical pixels at integer DPR; fractional DPR allows only a one-unit per-channel rounding difference. It also checks actual sharp/librsvg pixels: the seven panel bottoms and sides must remain visible across 20 theme/layout/scale combinations, including the 840px case that previously lost strokes. Box-drawing uses a non-scaling one-pixel stroke so `crispEdges` cannot round a reduced stroke away. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
+An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. It verifies the three windows' natural 900px width, separators' native 28px height, correct contact targets and absence of overflow at 900px/DPR 1, 600px/DPR 1.5 and 375px/DPR 1, in both themes and motion modes. Still-image comparisons require identical pixels at integer DPR; fractional DPR allows only a one-unit per-channel rounding difference. It also checks actual sharp/librsvg pixels: the seven panel bottoms and sides must remain visible across 20 theme/layout/scale combinations, including the 840px case that previously lost strokes. Box-drawing uses a non-scaling one-pixel stroke so `crispEdges` cannot round a reduced stroke away. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
 
 ## Automation and GitHub limits
 
 The workflow tests and compares deterministic offline output on pushes/PRs. Schedule (03:17 UTC) and manual dispatch refresh into temporary artifacts. Hosted schedules use the default branch and may be delayed.
 
-After the workflow is deployed to the repository's default branch with the user's approval, its separate publishing job automatically updates 35 allowlisted generated files after a successful scheduled/manual build. It uses the built-in `GITHUB_TOKEN`; no personal token or extra repository variables are required. Publishing requires the official repository and the exact default branch. `design/profile-terminal-2026` is explicitly barred, even if made the default branch. PRs and ordinary pushes only validate/build artifacts. Source-SHA checks and a normal push reject a moved branch; unrelated files are never staged. No reset, rebase or force push. A push of the reviewed design branch runs read-only CI; deployment to the default branch is a separate approval step. Branch protection can require a separate repository-approved publication route.
+After the workflow is deployed to the repository's default branch with the user's approval, its separate publishing job automatically updates 43 allowlisted generated files after a successful scheduled/manual build. It uses the built-in `GITHUB_TOKEN`; no personal token or extra repository variables are required. Publishing requires the official repository and the exact default branch. `design/profile-terminal-2026` is explicitly barred, even if made the default branch. PRs and ordinary pushes only validate/build artifacts. Source-SHA checks and a normal push reject a moved branch; unrelated files are never staged. No reset, rebase or force push. A push of the reviewed design branch runs read-only CI; deployment to the default branch is a separate approval step. Branch protection can require a separate repository-approved publication route.
 
 README SVGs are images: prompts and window buttons are not interactive. GitHub cannot execute the generator or local preview JS. Theme selection uses picture/prefers-color-scheme; browser preference can differ from a manually selected GitHub theme. Image caches and scheduled-run delays may delay visible updates. Public activity is a dated snapshot, never a live presence indicator. Native pins and the native contribution graph remain separate GitHub UI.
 

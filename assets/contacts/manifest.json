@@ -1,0 +1,23 @@
+{
+  "telegram": {
+    "file": "telegram.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/c37b20d397a710fdd402aae3cb643b820b142074/icons/telegram.svg",
+    "git_blob": "c46b0ed7098557205510d115000c08cb83af9106",
+    "license": "CC0-1.0",
+    "sha256": "9f7ab795a612be44d072797b12ae431e65c662a8209147714df06cd5b8ebd172"
+  },
+  "discord": {
+    "file": "discord.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/c37b20d397a710fdd402aae3cb643b820b142074/icons/discord.svg",
+    "git_blob": "9d7796b8a3068f33744f39640c84b40138c81cf0",
+    "license": "CC0-1.0",
+    "sha256": "a2625a85ff8a4aa0703ba7c9db39bc57257b3223cd8c19394e8ec491f50b9b83"
+  },
+  "vk": {
+    "file": "vk.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/c37b20d397a710fdd402aae3cb643b820b142074/icons/vk.svg",
+    "git_blob": "2eed8993d5dc9e38cd0052c747f9cdfc66d8f8aa",
+    "license": "CC0-1.0",
+    "sha256": "6d4d76617e0ada1a31772633fcf80070ab4f6e9e3b6a704158d08e982148a151"
+  }
+}

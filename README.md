@@ -7,10 +7,18 @@
   <img src="profile/session-light.svg" alt="FIUDEUS. Hello, I&#x27;m Artem." width="900">
 </picture>
 
+<p align="center">
+  <a href="https://t.me/fiudeus" title="Telegram: fiudeus"><picture><source media="(prefers-color-scheme: dark)" srcset="profile/contact-telegram-dark.svg"><img src="profile/contact-telegram-light.svg" alt="Telegram: fiudeus" width="117" height="28"></picture></a> &nbsp; <a href="https://discord.com/users/735903901622206575" title="Discord: fiudeus"><picture><source media="(prefers-color-scheme: dark)" srcset="profile/contact-discord-dark.svg"><img src="profile/contact-discord-light.svg" alt="Discord: fiudeus" width="109" height="28"></picture></a> &nbsp; <a href="https://vk.ru/businessqoose" title="VK: businessqoose"><picture><source media="(prefers-color-scheme: dark)" srcset="profile/contact-vk-dark.svg"><img src="profile/contact-vk-light.svg" alt="VK: businessqoose" width="70" height="28"></picture></a>
+</p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="profile/fastfetch-dark.svg">
   <img src="profile/fastfetch-light.svg" alt="Fastfetch: studies, focus, public GitHub statistics and repository languages." width="900">
 </picture>
+
+<p align="center">
+  <picture><source media="(prefers-color-scheme: dark)" srcset="profile/ansi-palette-dark.svg"><img src="profile/ansi-palette-light.svg" alt="Fiudeus terminal palette: eight banner colors" width="250" height="28"></picture>
+</p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="profile/toolbox-dark.svg">

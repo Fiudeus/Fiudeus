@@ -58,8 +58,9 @@ def validate(root=ROOT):
     expected={f'{scene}{width}-{theme}.svg' for scene in ('session','fastfetch','toolbox')
               for width in ('','-compact') for theme in ('dark','light')}
     expected.update(f'session{width}-still-{theme}.svg' for width in ('','-compact') for theme in ('dark','light'))
+    expected.update(f'{badge}-{theme}.svg' for badge in ('contact-telegram','contact-discord','contact-vk','ansi-palette') for theme in ('dark','light'))
     if {p.name for p in paths}!=expected:
-        raise ValueError('Expected 12 scene SVGs and four reduced-motion home variants')
+        raise ValueError('Expected 12 scene SVGs, four still home variants and eight separator SVGs')
     for path in paths:
         validate_svg(path)
     choices=sorted((root/'previews/toolbox').glob('*.svg'))
@@ -72,14 +73,14 @@ def validate(root=ROOT):
         raise ValueError('Missing toolbox comparison page')
     resources=Resources()
     resources.feed((root/'README.md').read_text(encoding='utf-8'))
-    if len(resources.paths)!=8:
+    if len(resources.paths)!=16:
         raise ValueError('README does not reference the complete scene variants')
     for target in resources.paths:
         if '-compact' in target:
             raise ValueError('README must preserve the wide profile composition')
         if '://' in target or not (root/target).is_file():
             raise ValueError(f'README resource does not resolve locally: {target}')
-    print(f'Validated {len(paths)} profile SVGs + {len(choices)} toolbox choices: XML, refs, bounds, motion, size budget; 8 wide README paths.')
+    print(f'Validated {len(paths)} profile SVGs + {len(choices)} toolbox choices: XML, refs, bounds, motion, size budget; 16 local README paths.')
 
 
 def main():

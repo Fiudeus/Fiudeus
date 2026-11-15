@@ -2,7 +2,42 @@
 
 Local verification on 2026-11-14, branch `design/profile-terminal-2026`, against baseline `655c0983d99305a5d26ddd092306eff90969b725`. The user subsequently authorized committing and pushing this design branch. Merge, PR, main-branch changes, manual hosted workflow dispatch and settings changes remain outside that authorization. Original `assets/matplotlib.svg` and `assets/plchldr` are preserved.
 
-## Final checks
+## Contact and palette update — 2026-11-15
+
+The user approved two separators between the three windows and supplied all three
+contact targets. After reviewing both local themes and the final contact-color
+progression, the user authorized committing and pushing this addition to
+`design/profile-terminal-2026`. Integration into main remains a separate decision.
+
+- 69 Python tests pass, including contact-link/order integration and preservation
+  of existing outputs when URL or preview configuration fails. The preservation
+  regression first reproduced partial replacement, then passed after all HTML
+  previews were prepared before the write phase.
+- All 36 SVGs validate: 24 profile assets and 12 toolbox comparisons; 16 README
+  resource references resolve locally. All 42 generated files reproduce
+  byte-for-byte. Static generation also validates.
+- Browser QA uses Edge 157.0.4341.60 with both themes/motion preferences at
+  900px/DPR 1, 600px/DPR 1.5 and 375px/DPR 1. The three windows retain their
+  900px source composition; four separator images retain native 28px height.
+  All three configured contact targets are correct and there is no horizontal
+  overflow. Existing typing, static-frame and 20-case border regressions pass.
+- Both full-profile PNGs were visually inspected. After the user's feedback,
+  the generic 16-color sample was replaced by eight exact `theme.banner`
+  lavender/pink/red colors, displayed as separate terminal blocks. VK changed
+  from red to a cool blue accent. The three contact caps now form a distinct
+  lavender → violet → blue progression in both themes. Service labels have no repeated usernames;
+  Discord's numeric ID appears only in the target URL.
+- The three genuine Simple Icons marks are bundled with pinned source revision,
+  SHA-256 checksums and CC0 license text. No network assets or new dependencies
+  were added to generation. New separators are static.
+- actionlint passes. All 13 local workflow safety checks pass against the exact
+  expanded 43-file artifact; publish gates and source-SHA protections are
+  unchanged. No hosted refresh workflow was manually dispatched.
+- Independent review found one partial-write issue, fixed and verified as above;
+  no actionable findings remain.
+- All 16 existing terminal SVGs and `data/github.json` are byte-for-byte unchanged.
+
+## Initial profile checks
 
 | Check | Observed result |
 | --- | --- |
