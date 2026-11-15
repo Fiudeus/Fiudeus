@@ -4,6 +4,8 @@ The final profile has three terminal windows: home, fastfetch and toolbox. The u
 
 A centered row of Telegram, Discord and VK contact badges separates home from fastfetch. Eight terminal block samples of the actual banner colors separate fastfetch from toolbox. Both separators stay at their native size while GitHub scales the window images.
 
+Every README row, including each terminal picture, uses the same paragraph wrapper. GitHub's bottom-only paragraph margins then give both separators equal space above and below.
+
 ## Local use
 
 Python 3.11+ is required. From the repository root on Windows:

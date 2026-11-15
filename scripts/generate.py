@@ -55,11 +55,11 @@ def picture(name):
             f'  <source media="(prefers-reduced-motion: reduce)" srcset="profile/{name}-still-light.svg">\n'
         )
     return (
-        '<picture>\n'
+        '<p align="center">\n<picture>\n'
         +still+
         f'  <source media="(prefers-color-scheme: dark)" srcset="profile/{name}-dark.svg">\n'
         f'  <img src="profile/{name}-light.svg" alt="{escape(ALTS[name],quote=True)}" width="900">\n'
-        '</picture>\n'
+        '</picture>\n</p>\n'
     )
 
 

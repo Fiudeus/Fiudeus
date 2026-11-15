@@ -37,6 +37,15 @@ progression, the user authorized committing and pushing this addition to
   no actionable findings remain.
 - All 16 existing terminal SVGs and `data/github.json` are byte-for-byte unchanged.
 
+## Separator spacing — 2026-11-15
+
+The later separator-spacing regression was reproduced in the public GitHub DOM:
+standalone terminal pictures gave 6px above the contacts and 22px below. Wrapping
+all terminal pictures in the same paragraphs as the separators gives 22px on both
+sides. Browser QA now uses GitHub's baseline image alignment and bottom-only
+paragraph margins, and asserts equal gaps for both separators in all 12 cases.
+The assertion first failed on the original 6px/22px layout.
+
 ## Initial profile checks
 
 | Check | Observed result |

@@ -56,7 +56,9 @@ try{
   for(const motion of ['reduce','no-preference'])for(const theme of ['dark','light'])for(const {width,dpr} of [{width:900,dpr:1},{width:600,dpr:1.5},{width:375,dpr:1}]){
     const context=await browser.newContext({viewport:{width,height:800},colorScheme:theme,reducedMotion:motion,deviceScaleFactor:dpr});
     const page=await context.newPage();
-    await page.setContent(`<!doctype html><base href="${base}/"><style>body{margin:0;padding:16px;background:${theme==='dark'?'#0d1117':'white'}}main{max-width:840px;margin:auto}main>picture{display:block}img{max-width:100%;height:auto;vertical-align:middle}main>picture img{display:block;width:100%}p[align=center]{margin:16px 0;text-align:center}</style><main>${readme}</main>`);
+    // GitHub uses inline, baseline-aligned images and paragraphs with only a
+    // bottom margin. Symmetric margins/block images would conceal README bugs.
+    await page.setContent(`<!doctype html><base href="${base}/"><style>body{margin:0;padding:16px;font:16px/1.5 system-ui;background:${theme==='dark'?'#0d1117':'white'}}main{max-width:840px;margin:auto}img{max-width:100%;height:auto;vertical-align:baseline}p{margin:0 0 16px}p[align=center]{text-align:center}</style><main>${readme}</main>`);
     await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));
     const sources=await page.locator('img').evaluateAll(nodes=>nodes.map(img=>img.currentSrc));
     for(const [index,source] of sources.entries())assert.ok(source.endsWith(`${index===0&&motion==='reduce'?'-still':''}-${theme}.svg`)&&!source.includes('-compact'),source);
@@ -64,7 +66,7 @@ try{
       'Profile README must keep its wide composition even with a narrow logical viewport or high display scaling');
     assert.deepEqual(await page.locator('main a').evaluateAll(nodes=>nodes.map(node=>node.href)),[
       'https://t.me/fiudeus','https://discord.com/users/735903901622206575','https://vk.ru/businessqoose']);
-    const separators=await page.locator('p img').evaluateAll(nodes=>nodes.map(img=>{
+    const separators=await page.locator('p img:not([width="900"])').evaluateAll(nodes=>nodes.map(img=>{
       const box=img.getBoundingClientRect();return{width:box.width,height:box.height,natural:img.naturalWidth,left:box.left,right:box.right};
     }));
     assert.equal(separators.length,4);
@@ -73,6 +75,15 @@ try{
       assert.equal(image.height,28);
       assert.ok(image.left>=16&&image.right<=width-16,'Contact badges and palette fit inside the README');
     }
+    const gaps=await page.locator('main img').evaluateAll(images=>{
+      const boxes=images.map(img=>img.getBoundingClientRect());
+      return[
+        {name:'contacts',above:boxes[1].top-boxes[0].bottom,below:boxes[4].top-boxes[1].bottom},
+        {name:'palette',above:boxes[5].top-boxes[4].bottom,below:boxes[6].top-boxes[5].bottom},
+      ];
+    });
+    for(const gap of gaps)assert.ok(Math.abs(gap.above-gap.below)<.05,
+      `${gap.name}: unequal vertical gaps (${gap.above}px above / ${gap.below}px below)`);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,'No horizontal overflow');
     assert.equal(await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),motion==='reduce');
     // Exercise the real <img> embedding too: browser media emulation can behave
@@ -91,7 +102,7 @@ try{
       assert.ok(maximum<=(Number.isInteger(dpr)?0:1),'README image must remain still with reduced motion');
     }
     await page.screenshot({path:path.join(out,`readme-${theme}-${width}${dpr===1?'':'-dpr'+dpr}${motion==='reduce'?'':'-animated'}.png`),fullPage:true});
-    report.checks.push(`README wide scenes, native-size separators and correct contact targets / ${theme} / ${width}px / DPR ${dpr} / motion ${motion} / no horizontal overflow${motion==='reduce'?' / stable still frames':''}`);
+    report.checks.push(`README wide scenes, native-size separators, symmetric vertical gaps and correct contact targets / ${theme} / ${width}px / DPR ${dpr} / motion ${motion} / no horizontal overflow${motion==='reduce'?' / stable still frames':''}`);
     await context.close();
   }
   const motionContext=await browser.newContext({viewport:{width:1000,height:900},reducedMotion:'no-preference'});
