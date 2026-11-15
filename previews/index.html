@@ -20,7 +20,7 @@ a{color:inherit}footer{max-width:900px;margin:24px auto;line-height:1.8}body:has
 The calendar is GitHub's own contribution graph; the profile does not duplicate it.</footer>
 <script>
 const theme=document.querySelector('#theme'), layout=document.querySelector('#layout'),toolbox=document.querySelector('#toolbox');
-const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'auto';
+const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'desktop';
 toolbox.value=params.get('toolbox')||'saved';
 function render(){const dark=theme.value==='dark'||(theme.value==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
 const compact=layout.value==='compact'||(layout.value==='auto'&&innerWidth<=600);

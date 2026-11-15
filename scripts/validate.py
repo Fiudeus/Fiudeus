@@ -72,12 +72,14 @@ def validate(root=ROOT):
         raise ValueError('Missing toolbox comparison page')
     resources=Resources()
     resources.feed((root/'README.md').read_text(encoding='utf-8'))
-    if len(resources.paths)!=16:
+    if len(resources.paths)!=8:
         raise ValueError('README does not reference the complete scene variants')
     for target in resources.paths:
+        if '-compact' in target:
+            raise ValueError('README must preserve the wide profile composition')
         if '://' in target or not (root/target).is_file():
             raise ValueError(f'README resource does not resolve locally: {target}')
-    print(f'Validated {len(paths)} profile SVGs + {len(choices)} toolbox choices: XML, refs, bounds, motion, size budget; 16 README paths.')
+    print(f'Validated {len(paths)} profile SVGs + {len(choices)} toolbox choices: XML, refs, bounds, motion, size budget; 8 wide README paths.')
 
 
 def main():

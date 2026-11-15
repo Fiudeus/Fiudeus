@@ -41,23 +41,22 @@ def transcript(canvas):
 
 
 def picture(name):
+    # GitHub profile and repository views must use the same wide composition.
+    # Compact layouts belong to the local viewer, not viewport-based sources:
+    # a narrow logical viewport/display scaling can otherwise enlarge them.
     # Choose a genuinely still image in the embedding document. Some browsers
     # apply media emulation to HTML but not to CSS inside external SVG images.
     still = ''
     if name=='session':
         still=(
-            f'  <source media="(max-width: 600px) and (prefers-color-scheme: dark) and (prefers-reduced-motion: reduce)" srcset="profile/{name}-compact-still-dark.svg">\n'
-            f'  <source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="profile/{name}-compact-still-light.svg">\n'
             f'  <source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: reduce)" srcset="profile/{name}-still-dark.svg">\n'
             f'  <source media="(prefers-reduced-motion: reduce)" srcset="profile/{name}-still-light.svg">\n'
         )
     return (
         '<picture>\n'
         +still+
-        f'  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="profile/{name}-compact-dark.svg">\n'
-        f'  <source media="(max-width: 600px) and (prefers-color-scheme: light)" srcset="profile/{name}-compact-light.svg">\n'
         f'  <source media="(prefers-color-scheme: dark)" srcset="profile/{name}-dark.svg">\n'
-        f'  <img src="profile/{name}-light.svg" alt="{escape(ALTS[name],quote=True)}" width="100%">\n'
+        f'  <img src="profile/{name}-light.svg" alt="{escape(ALTS[name],quote=True)}" width="900">\n'
         '</picture>\n'
     )
 
@@ -93,7 +92,7 @@ a{color:inherit}footer{max-width:900px;margin:24px auto;line-height:1.8}body:has
 The calendar is GitHub's own contribution graph; the profile does not duplicate it.</footer>
 <script>
 const theme=document.querySelector('#theme'), layout=document.querySelector('#layout'),toolbox=document.querySelector('#toolbox');
-const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'auto';
+const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'desktop';
 toolbox.value=params.get('toolbox')||'saved';
 function render(){const dark=theme.value==='dark'||(theme.value==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
 const compact=layout.value==='compact'||(layout.value==='auto'&&innerWidth<=600);

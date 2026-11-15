@@ -15,7 +15,7 @@ Three windows:
 - Fastfetch: identity, Python role, study/campus/focus and real public GitHub metrics/language bytes. Explain stars plainly; label the language scope/bytes, show tenths and `other`, and remove the redundant snapshot footer.
 - Toolbox: all seven original categories and technologies, plus the user's Java addition. Latest Languages order: Python, Java, C++, SQL, Bash (27 technologies overall). Role: Data Scientist. Other category orders are unchanged. The chosen design is Unicode outline panels. Preserve tree and ANSI-background badge alternatives in local comparison previews. Original learning topics plus user-requested Deep learning and Mathematics.
 
-Desktop is 900px/92 cells, compact 540px/54 cells. Shared title bars and baseline metrics; no lower status strips. All layout is cell-based, including two-cell logo slots.
+The README always uses the wide 900px/92-cell composition, including in the profile view and at higher display scaling. Compact 540px/54-cell layouts remain explicit local preview options. Only theme and motion change the README source; there is no viewport-based layout switch. Shared title bars and baseline metrics; no lower status strips. All layout is cell-based, including two-cell logo slots.
 
 ## Rendering
 

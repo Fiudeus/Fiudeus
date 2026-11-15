@@ -54,13 +54,15 @@ try{
   report.browser=browser.version();
   const readme=await fs.readFile(path.join(root,'README.md'),'utf8');
   const pictures=readme.match(/<picture>[\s\S]*?<\/picture>/g).join('\n');
-  for(const motion of ['reduce','no-preference'])for(const theme of ['dark','light'])for(const width of [900,375]){
-    const context=await browser.newContext({viewport:{width,height:800},colorScheme:theme,reducedMotion:motion,deviceScaleFactor:1});
+  for(const motion of ['reduce','no-preference'])for(const theme of ['dark','light'])for(const {width,dpr} of [{width:900,dpr:1},{width:600,dpr:1.5},{width:375,dpr:1}]){
+    const context=await browser.newContext({viewport:{width,height:800},colorScheme:theme,reducedMotion:motion,deviceScaleFactor:dpr});
     const page=await context.newPage();
     await page.setContent(`<!doctype html><base href="${base}/"><style>body{margin:0;padding:16px;background:${theme==='dark'?'#0d1117':'white'}}main{max-width:840px;margin:auto}img{display:block;width:100%;height:auto;margin-bottom:16px}</style><main>${pictures}</main>`);
     await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));
     const sources=await page.locator('img').evaluateAll(nodes=>nodes.map(img=>img.currentSrc));
-    for(const [index,source] of sources.entries())assert.ok(source.endsWith(`${width<600?'-compact':''}${index===0&&motion==='reduce'?'-still':''}-${theme}.svg`),source);
+    for(const [index,source] of sources.entries())assert.ok(source.endsWith(`${index===0&&motion==='reduce'?'-still':''}-${theme}.svg`)&&!source.includes('-compact'),source);
+    assert.deepEqual(await page.locator('img').evaluateAll(nodes=>nodes.map(img=>img.naturalWidth)),[900,900,900],
+      'Profile README must keep its wide composition even with a narrow logical viewport or high display scaling');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,'No horizontal overflow');
     assert.equal(await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),motion==='reduce');
     // Exercise the real <img> embedding too: browser media emulation can behave
@@ -70,10 +72,16 @@ try{
       const before=await home.screenshot({animations:'allow'});
       await page.waitForTimeout(900);
       const after=await home.screenshot({animations:'allow'});
-      assert.equal(Buffer.compare(before,after),0,'README image must remain still with reduced motion');
+      const a=await sharp(before).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+      const b=await sharp(after).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+      assert.deepEqual([a.info.width,a.info.height],[b.info.width,b.info.height]);
+      let maximum=0;for(let i=0;i<a.data.length;i++)maximum=Math.max(maximum,Math.abs(a.data[i]-b.data[i]));
+      // Fractional display scaling can round a few static color channels by
+      // one unit. It must never change geometry, visibility, or animation state.
+      assert.ok(maximum<=(Number.isInteger(dpr)?0:1),'README image must remain still with reduced motion');
     }
-    await page.screenshot({path:path.join(out,`readme-${theme}-${width}${motion==='reduce'?'':'-animated'}.png`),fullPage:true});
-    report.checks.push(`README picture sources / ${theme} / ${width}px / motion ${motion} / no horizontal overflow${motion==='reduce'?' / pixel-identical still frames':''}`);
+    await page.screenshot({path:path.join(out,`readme-${theme}-${width}${dpr===1?'':'-dpr'+dpr}${motion==='reduce'?'':'-animated'}.png`),fullPage:true});
+    report.checks.push(`README wide picture sources / ${theme} / ${width}px / DPR ${dpr} / motion ${motion} / no horizontal overflow${motion==='reduce'?' / stable still frames':''}`);
     await context.close();
   }
   const motionContext=await browser.newContext({viewport:{width:1000,height:900},reducedMotion:'no-preference'});
