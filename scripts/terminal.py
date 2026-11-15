@@ -93,7 +93,9 @@ class Grid:
             cx, cy = x + w / 2, y + h / 2
             points = {'l': (x, cy), 'r': (x+w, cy), 'u': (cx, y), 'd': (cx, y+h)}
             d = ''.join(f'M{n(cx)} {n(cy)}L{n(points[k][0])} {n(points[k][1])}' for k in BOX[ch])
-            return f'<path d="{d}" fill="none" stroke="currentColor" stroke-width="1.05" shape-rendering="crispEdges"/>'
+            # A scaled subpixel stroke can disappear with crispEdges. Keep a
+            # full viewport pixel when an SVG is rasterized at a reduced size.
+            return f'<path d="{d}" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" shape-rendering="crispEdges"/>'
         if ch in '═║╔╗╚╝':
             cx, cy, gap = x+w/2, y+h/2, 1.45
             if ch == '═':

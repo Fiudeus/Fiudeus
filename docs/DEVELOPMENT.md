@@ -56,7 +56,7 @@ Desktop: 900px, 92 cells, 15px text and 23px row pitch. Compact: 540px, 54 cells
 | `scripts/github_stats.py` | Verified TLS, bounded public acquisition, pagination, scoped metrics and atomic snapshots |
 | `scripts/validate.py` | XML, references, cell bounds, image budgets and README/comparison resource checks |
 | `scripts/render.mjs` | Optional sharp PNG rendering |
-| `scripts/browser-qa.mjs` | Optional Playwright source selection, animations, reduced motion, bounds and preview controls |
+| `scripts/browser-qa.mjs` | Optional Playwright/sharp source selection, motion, bounds, scaled frame visibility and preview controls |
 
 JetBrains Mono Regular/Bold v2.304 is vendored with OFL and hashes. Only used glyphs are outlined once per SVG and placed with `use`. `wcwidth` determines text width; NFC normalization preserves combining anchors. Unsupported glyphs and controls fail with useful errors.
 
@@ -91,7 +91,7 @@ node scripts/render.mjs
 node scripts/browser-qa.mjs
 ```
 
-An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
+An installed Chromium/Edge executable can be selected with `PROFILE_BROWSER`. QA binds a temporary server only to 127.0.0.1 and closes it on completion. It also checks actual sharp/librsvg pixels: the seven panel bottoms and sides must remain visible across 20 theme/layout/scale combinations, including the 840px case that previously lost strokes. Box-drawing uses a non-scaling one-pixel stroke so `crispEdges` cannot round a reduced stroke away. Contact sheets are under `previews`; diagnostic screenshots/report are ignored under `previews/qa`.
 
 ## Automation and GitHub limits
 

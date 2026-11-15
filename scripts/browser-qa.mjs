@@ -1,4 +1,4 @@
-// Optional development dependency: Playwright with Chromium (or PROFILE_BROWSER).
+// Optional development dependencies: Playwright with Chromium and sharp.
 // A local-only server is started and closed by this command.
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.PROFILE_NODE_MODULES?path.join(process.env.PROFILE_NODE_MODULES,'playwright'):'playwright');
+const sharp=require(process.env.PROFILE_NODE_MODULES?path.join(process.env.PROFILE_NODE_MODULES,'sharp'):'sharp');
 const root=process.cwd(),out=path.join(root,'previews/qa');
 await fs.mkdir(out,{recursive:true});
 const mime={'.svg':'image/svg+xml','.html':'text/html','.png':'image/png','.md':'text/plain'};
@@ -21,6 +22,33 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=`http://127.0.0.1:${server.address().port}`;
 let browser;
 const report={checks:[],browser:null};
+
+function assertRasterFrames(data,info,geometry,scale,label){
+  const paper=geometry.paper.match(/[0-9a-f]{2}/gi).map(value=>parseInt(value,16));
+  const ink=(x,y)=>{
+    const i=(y*info.width+x)*info.channels;
+    return Math.max(...paper.map((channel,k)=>Math.abs(data[i+k]-channel)))>20;
+  };
+  for(const frame of geometry.frames){
+    const x1=Math.ceil((frame.left+9)*scale),x2=Math.floor((frame.right-9)*scale);
+    const cy=Math.floor(frame.bottom*scale);
+    let bottom=0;
+    for(let y=Math.max(0,cy-2);y<=Math.min(info.height-1,cy+2);y++){
+      let hits=0;for(let x=x1;x<x2;x++)if(ink(x,y))hits++;
+      bottom=Math.max(bottom,hits/(x2-x1));
+    }
+    assert.ok(bottom>.95,`${label}: bottom border on terminal row ${frame.row} disappeared (${bottom})`);
+    const y1=Math.ceil((frame.top+4)*scale),y2=Math.floor((frame.bottom-4)*scale);
+    for(const [side,x] of [['left',frame.left],['right',frame.right]]){
+      const cx=Math.floor(x*scale);let coverage=0;
+      for(let px=Math.max(0,cx-2);px<=Math.min(info.width-1,cx+2);px++){
+        let hits=0;for(let y=y1;y<y2;y++)if(ink(px,y))hits++;
+        coverage=Math.max(coverage,hits/(y2-y1));
+      }
+      assert.ok(coverage>.95,`${label}: ${side} border on terminal row ${frame.row} disappeared (${coverage})`);
+    }
+  }
+}
 try{
   browser=await chromium.launch({headless:true,...(process.env.PROFILE_BROWSER?{executablePath:process.env.PROFILE_BROWSER}:{})});
   report.browser=browser.version();
@@ -69,16 +97,35 @@ try{
   report.checks.push('All four still home variants show complete output without any animation, even with no reduced-motion preference');
   await motionContext.close();
   const reduced=await browser.newContext({reducedMotion:'reduce'}),rp=await reduced.newPage();
+  let rasterCases=0;
   for(const compact of [false,true])for(const theme of ['dark','light'])for(const scene of ['session','fastfetch','toolbox','tree','badges','panels']){
     const prefix=['tree','badges','panels'].includes(scene)?'previews/toolbox':'profile';
     await rp.goto(`${base}/${prefix}/${scene}${compact?'-compact':''}-${theme}.svg`);
     const result=await rp.evaluate(()=>{
       const svg=document.documentElement,w=svg.viewBox.baseVal.width,h=svg.viewBox.baseVal.height;
       const bad=[...document.querySelectorAll('[data-row]')].filter(el=>{const b=el.getBBox();return b.x<-.6||b.y<-.6||b.x+b.width>w+.6||b.y+b.height>h+.6;}).map(el=>el.dataset.text);
-      return{animations:document.getAnimations().length,bad,output:document.querySelector('.welcome-output')?getComputedStyle(document.querySelector('.welcome-output')).opacity:null};
+      const rows=[...document.querySelectorAll('[data-row]')];
+      const frames=rows.filter(el=>/^└─+┘$/u.test(el.dataset.text)).map(el=>{
+        const b=el.getBBox();
+        const header=rows.filter(row=>row.dataset.col===el.dataset.col&&+row.dataset.row<+el.dataset.row&&row.dataset.text.startsWith('┌'))
+          .sort((a,b)=>+b.dataset.row-+a.dataset.row)[0];
+        return {left:b.x,right:b.x+b.width,bottom:b.y+b.height,top:header.querySelector('path').getBBox().y,row:el.dataset.row};
+      });
+      const paper=svg.querySelector(':scope > rect[fill]:not([fill="none"])').getAttribute('fill');
+      return{width:w,frames,paper,animations:document.getAnimations().length,bad,output:document.querySelector('.welcome-output')?getComputedStyle(document.querySelector('.welcome-output')).opacity:null};
     });
     assert.equal(result.animations,0,`${scene}: reduced motion`);assert.deepEqual(result.bad,[],`${scene}: glyph bounds`);
     if(scene==='session')assert.equal(result.output,'1','Static output stays visible');
+    if(scene==='panels'){
+      assert.equal(result.frames.length,7,'Every toolbox panel must have a closed frame');
+      const source=await fs.readFile(path.join(root,prefix,`${scene}${compact?'-compact':''}-${theme}.svg`));
+      for(const width of compact?[540,400,375,343]:[900,840,828,818,768,720]){
+        const scale=width/result.width;
+        const {data,info}=await sharp(source,{density:72*scale}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+        assertRasterFrames(data,info,result,scale,`${theme}/${compact?'compact':'desktop'}/${width}px`);
+        rasterCases++;
+      }
+    }
   }
   for(const compact of [false,true])for(const theme of ['dark','light']){
     await rp.goto(`${base}/profile/session${compact?'-compact':''}-still-${theme}.svg`);
@@ -86,6 +133,7 @@ try{
     assert.equal(await rp.locator('.welcome-output').evaluate(el=>getComputedStyle(el).opacity),'1');
   }
   await reduced.close();report.checks.push('All 28 SVGs: zero animations with reduced motion; complete output; scene glyph ink stays in bounds');
+  report.checks.push(`Raster regression: all seven panel bottoms and sides stay visible across ${rasterCases} theme/layout/scale cases`);
   const previewContext=await browser.newContext({viewport:{width:900,height:800},reducedMotion:'reduce'});
   const previewPage=await previewContext.newPage();
   await previewPage.goto(base+'/previews/index.html');
