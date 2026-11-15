@@ -50,6 +50,24 @@ learning = ["Backend development", "Algorithms & Data Structures", "System Desig
 exclude_repos = ["Fiudeus", "LuminaRead"]
 snapshot = "data/github.json"
 
+[contacts.telegram]
+label = "Telegram"
+username = "fiudeus"
+url = "https://t.me/fiudeus"
+accent = "contact_telegram"
+
+[contacts.discord]
+label = "Discord"
+username = "fiudeus"
+url = "https://discord.com/users/735903901622206575"
+accent = "contact_discord"
+
+[contacts.vk]
+label = "VK"
+username = "businessqoose"
+url = "https://vk.ru/businessqoose"
+accent = "contact_vk"
+
 [themes.dark]
 base = "#1e1e2e"
 chrome = "#181825"
@@ -68,6 +86,9 @@ banner = ["#b4befe", "#bcaef9", "#cba6f7", "#d9a6ed", "#e6a5dc", "#efa0c8", "#f5
 heat0 = "#585b70"
 badge_lavender = "#302b43"
 badge_red = "#3d2b3d"
+contact_telegram = "#cba6f7"
+contact_discord = "#b1a9f4"
+contact_vk = "#91b8f3"
 
 [themes.light]
 base = "#f4f2f8"
@@ -87,3 +108,6 @@ banner = ["#5553a1", "#644aad", "#7542a6", "#873d9c", "#963b8b", "#a73777", "#b2
 heat0 = "#b7afc8"
 badge_lavender = "#e6def2"
 badge_red = "#f0dfe9"
+contact_telegram = "#7542a6"
+contact_discord = "#6250b5"
+contact_vk = "#3e67ad"

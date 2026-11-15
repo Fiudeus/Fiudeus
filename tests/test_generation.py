@@ -5,6 +5,7 @@ import tempfile
 import contextlib
 import io
 import unittest
+from html.parser import HTMLParser
 from xml.etree import ElementTree as ET
 
 try:
@@ -154,6 +155,72 @@ class GenerationTests(unittest.TestCase):
         self.assertNotRegex(text,'[\ue000-\uf8ff\U000f0000-\U000ffffd]')
         self.assertIn('Scikit-learn',text)
         self.assertIn('Mathematics',text)
+
+    def test_generated_readme_links_contacts_and_separates_the_three_scenes(self):
+        from scripts.generate import generate
+
+        class Readme(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.links, self.images = [], []
+
+            def handle_starttag(self, tag, attrs):
+                attrs = dict(attrs)
+                if tag == 'a':
+                    self.links.append(attrs['href'])
+                if tag == 'img':
+                    self.images.append(attrs['src'])
+
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            with contextlib.redirect_stdout(io.StringIO()):
+                generate(self.config, self.stats, out)
+            readme = Readme()
+            readme.feed((out/'README.md').read_text(encoding='utf-8'))
+            self.assertEqual(readme.links, [
+                'https://t.me/fiudeus',
+                'https://discord.com/users/735903901622206575',
+                'https://vk.ru/businessqoose',
+            ])
+            self.assertEqual(readme.images, [
+                'profile/session-light.svg',
+                'profile/contact-telegram-light.svg',
+                'profile/contact-discord-light.svg',
+                'profile/contact-vk-light.svg',
+                'profile/fastfetch-light.svg',
+                'profile/ansi-palette-light.svg',
+                'profile/toolbox-light.svg',
+            ])
+            for service in ('telegram', 'discord', 'vk'):
+                for theme in ('dark', 'light'):
+                    svg = ET.parse(out/'profile'/f'contact-{service}-{theme}.svg').getroot()
+                    self.assertNotIn('735903901622206575', ET.tostring(svg, encoding='unicode'))
+
+    def test_bad_contact_url_fails_before_replacing_generated_files(self):
+        from scripts.generate import generate
+        import copy
+        config = copy.deepcopy(self.config)
+        config.setdefault('contacts', {}).setdefault('telegram', {})['url'] = 'javascript:alert(1)'
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            (out/'README.md').write_text('previous profile', encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'contact.*https'):
+                generate(config, self.stats, out)
+            self.assertEqual((out/'README.md').read_text(encoding='utf-8'), 'previous profile')
+            self.assertFalse((out/'profile').exists())
+
+    def test_bad_preview_input_does_not_replace_completed_outputs(self):
+        from scripts.generate import generate
+        import copy
+        config = copy.deepcopy(self.config)
+        config['contacts']['telegram']['username'] = 123456
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            (out/'README.md').write_text('previous profile', encoding='utf-8')
+            with self.assertRaises(TypeError):
+                generate(config, self.stats, out)
+            self.assertEqual((out/'README.md').read_text(encoding='utf-8'), 'previous profile')
+            self.assertFalse((out/'profile').exists())
 
 
 if __name__ == '__main__':

@@ -13,6 +13,21 @@ for(const compact of [false,true])for(const theme of ['dark','light']){
     const source=await fs.readFile(path.join(root,'profile',`${name}${compact?'-compact':''}-${theme}.svg`));
     const img=sharp(source),meta=await img.metadata();
     layers.push({input:await img.png().toBuffer(),left:16,top});top+=meta.height+16;
+    if(name==='session'){
+      const badges=await Promise.all(['telegram','discord','vk'].map(async service=>{
+        const img=sharp(await fs.readFile(path.join(root,'profile',`contact-${service}-${theme}.svg`)));
+        return{input:await img.png().toBuffer(),meta:await img.metadata()};
+      }));
+      const rowWidth=badges.reduce((total,badge)=>total+badge.meta.width,0)+16;
+      let left=16+Math.round((width-rowWidth)/2);
+      for(const badge of badges){layers.push({input:badge.input,left,top});left+=badge.meta.width+8;}
+      top+=28+16;
+    }
+    if(name==='fastfetch'){
+      const img=sharp(await fs.readFile(path.join(root,'profile',`ansi-palette-${theme}.svg`)));
+      layers.push({input:await img.png().toBuffer(),left:16+Math.round((width-250)/2),top});
+      top+=28+16;
+    }
   }
   const output=path.join(root,'previews',`profile${compact?'-compact':''}-${theme}.png`);
   await sharp({create:{width:width+32,height:top,channels:4,background:theme==='dark'?'#0d1117':'#fff'}})

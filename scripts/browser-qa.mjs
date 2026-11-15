@@ -53,16 +53,37 @@ try{
   browser=await chromium.launch({headless:true,...(process.env.PROFILE_BROWSER?{executablePath:process.env.PROFILE_BROWSER}:{})});
   report.browser=browser.version();
   const readme=await fs.readFile(path.join(root,'README.md'),'utf8');
-  const pictures=readme.match(/<picture>[\s\S]*?<\/picture>/g).join('\n');
   for(const motion of ['reduce','no-preference'])for(const theme of ['dark','light'])for(const {width,dpr} of [{width:900,dpr:1},{width:600,dpr:1.5},{width:375,dpr:1}]){
     const context=await browser.newContext({viewport:{width,height:800},colorScheme:theme,reducedMotion:motion,deviceScaleFactor:dpr});
     const page=await context.newPage();
-    await page.setContent(`<!doctype html><base href="${base}/"><style>body{margin:0;padding:16px;background:${theme==='dark'?'#0d1117':'white'}}main{max-width:840px;margin:auto}img{display:block;width:100%;height:auto;margin-bottom:16px}</style><main>${pictures}</main>`);
+    // GitHub uses inline, baseline-aligned images and paragraphs with only a
+    // bottom margin. Symmetric margins/block images would conceal README bugs.
+    await page.setContent(`<!doctype html><base href="${base}/"><style>body{margin:0;padding:16px;font:16px/1.5 system-ui;background:${theme==='dark'?'#0d1117':'white'}}main{max-width:840px;margin:auto}img{max-width:100%;height:auto;vertical-align:baseline}p{margin:0 0 16px}p[align=center]{text-align:center}</style><main>${readme}</main>`);
     await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));
     const sources=await page.locator('img').evaluateAll(nodes=>nodes.map(img=>img.currentSrc));
     for(const [index,source] of sources.entries())assert.ok(source.endsWith(`${index===0&&motion==='reduce'?'-still':''}-${theme}.svg`)&&!source.includes('-compact'),source);
-    assert.deepEqual(await page.locator('img').evaluateAll(nodes=>nodes.map(img=>img.naturalWidth)),[900,900,900],
+    assert.deepEqual(await page.locator('img[width="900"]').evaluateAll(nodes=>nodes.map(img=>img.naturalWidth)),[900,900,900],
       'Profile README must keep its wide composition even with a narrow logical viewport or high display scaling');
+    assert.deepEqual(await page.locator('main a').evaluateAll(nodes=>nodes.map(node=>node.href)),[
+      'https://t.me/fiudeus','https://discord.com/users/735903901622206575','https://vk.ru/businessqoose']);
+    const separators=await page.locator('p img:not([width="900"])').evaluateAll(nodes=>nodes.map(img=>{
+      const box=img.getBoundingClientRect();return{width:box.width,height:box.height,natural:img.naturalWidth,left:box.left,right:box.right};
+    }));
+    assert.equal(separators.length,4);
+    for(const image of separators){
+      assert.equal(image.width,image.natural,'Separators must keep their native size');
+      assert.equal(image.height,28);
+      assert.ok(image.left>=16&&image.right<=width-16,'Contact badges and palette fit inside the README');
+    }
+    const gaps=await page.locator('main img').evaluateAll(images=>{
+      const boxes=images.map(img=>img.getBoundingClientRect());
+      return[
+        {name:'contacts',above:boxes[1].top-boxes[0].bottom,below:boxes[4].top-boxes[1].bottom},
+        {name:'palette',above:boxes[5].top-boxes[4].bottom,below:boxes[6].top-boxes[5].bottom},
+      ];
+    });
+    for(const gap of gaps)assert.ok(Math.abs(gap.above-gap.below)<.05,
+      `${gap.name}: unequal vertical gaps (${gap.above}px above / ${gap.below}px below)`);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,'No horizontal overflow');
     assert.equal(await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),motion==='reduce');
     // Exercise the real <img> embedding too: browser media emulation can behave
@@ -81,7 +102,7 @@ try{
       assert.ok(maximum<=(Number.isInteger(dpr)?0:1),'README image must remain still with reduced motion');
     }
     await page.screenshot({path:path.join(out,`readme-${theme}-${width}${dpr===1?'':'-dpr'+dpr}${motion==='reduce'?'':'-animated'}.png`),fullPage:true});
-    report.checks.push(`README wide picture sources / ${theme} / ${width}px / DPR ${dpr} / motion ${motion} / no horizontal overflow${motion==='reduce'?' / stable still frames':''}`);
+    report.checks.push(`README wide scenes, native-size separators, symmetric vertical gaps and correct contact targets / ${theme} / ${width}px / DPR ${dpr} / motion ${motion} / no horizontal overflow${motion==='reduce'?' / stable still frames':''}`);
     await context.close();
   }
   const motionContext=await browser.newContext({viewport:{width:1000,height:900},reducedMotion:'no-preference'});
@@ -140,7 +161,16 @@ try{
     assert.equal(await rp.evaluate(()=>document.getAnimations().length),0);
     assert.equal(await rp.locator('.welcome-output').evaluate(el=>getComputedStyle(el).opacity),'1');
   }
-  await reduced.close();report.checks.push('All 28 SVGs: zero animations with reduced motion; complete output; scene glyph ink stays in bounds');
+  for(const theme of ['dark','light'])for(const name of ['contact-telegram','contact-discord','contact-vk','ansi-palette']){
+    await rp.goto(`${base}/profile/${name}-${theme}.svg`);
+    assert.equal(await rp.evaluate(()=>document.getAnimations().length),0);
+    const bad=await rp.evaluate(()=>{
+      const svg=document.documentElement,w=svg.viewBox.baseVal.width,h=svg.viewBox.baseVal.height;
+      return [...document.querySelectorAll('[data-row]')].filter(el=>{const b=el.getBBox();return b.x<0||b.y<0||b.x+b.width>w||b.y+b.height>h;}).map(el=>el.dataset.text);
+    });
+    assert.deepEqual(bad,[],`${name}: separator glyph bounds`);
+  }
+  await reduced.close();report.checks.push('All 36 SVGs: zero animations with reduced motion; complete output; scene and separator glyph ink stays in bounds');
   report.checks.push(`Raster regression: all seven panel bottoms and sides stay visible across ${rasterCases} theme/layout/scale cases`);
   const previewContext=await browser.newContext({viewport:{width:900,height:800},reducedMotion:'reduce'});
   const previewPage=await previewContext.newPage();

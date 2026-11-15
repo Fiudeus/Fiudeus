@@ -7,6 +7,7 @@
 body{margin:0;padding:24px}header{max-width:900px;margin:0 auto 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 label{display:flex;gap:8px;align-items:center}select{font:inherit;padding:5px;border:1px solid #7f849c;background:transparent;color:inherit}
 main{max-width:900px;margin:auto;display:grid;gap:16px}main.compact{max-width:540px}img{display:block;width:100%;height:auto}
+.separator{margin:0;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}.separator img{width:auto;max-width:100%;height:28px}
 a{color:inherit}footer{max-width:900px;margin:24px auto;line-height:1.8}body:has(main.compact) footer{max-width:540px}
 @media(max-width:600px){body{padding:12px}main{gap:12px}}
 </style>
@@ -22,12 +23,19 @@ The calendar is GitHub's own contribution graph; the profile does not duplicate 
 const theme=document.querySelector('#theme'), layout=document.querySelector('#layout'),toolbox=document.querySelector('#toolbox');
 const params=new URLSearchParams(location.search);theme.value=params.get('theme')||'dark';layout.value=params.get('layout')||'desktop';
 toolbox.value=params.get('toolbox')||'saved';
+const contacts=[{"service": "telegram", "url": "https://t.me/fiudeus", "alt": "Telegram: fiudeus", "width": 117}, {"service": "discord", "url": "https://discord.com/users/735903901622206575", "alt": "Discord: fiudeus", "width": 109}, {"service": "vk", "url": "https://vk.ru/businessqoose", "alt": "VK: businessqoose", "width": 70}];
+function contactRow(mode){const row=document.createElement('p');row.className='separator';
+for(const item of contacts){const a=document.createElement('a'),img=document.createElement('img');a.href=item.url;a.title=item.alt;
+img.src='../profile/contact-'+item.service+'-'+mode+'.svg';img.alt=item.alt;img.width=item.width;img.height=28;a.append(img);row.append(a);}return row;}
+function paletteRow(mode){const row=document.createElement('p'),img=document.createElement('img');row.className='separator';
+img.src='../profile/ansi-palette-'+mode+'.svg';img.alt='Fiudeus terminal palette: eight banner colors';img.width=250;img.height=28;row.append(img);return row;}
 function render(){const dark=theme.value==='dark'||(theme.value==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
 const compact=layout.value==='compact'||(layout.value==='auto'&&innerWidth<=600);
 const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.dataset.theme=dark?'dark':'light';const main=document.querySelector('main');main.className=compact?'compact':'';
-main.replaceChildren(...['session','fastfetch','toolbox'].map(name=>{const img=document.createElement('img');
-img.src=name==='toolbox'&&toolbox.value!=='saved'?'toolbox/'+toolbox.value+(compact?'-compact':'')+'-'+(dark?'dark':'light')+'.svg':'../profile/'+name+(compact?'-compact':'')+(name==='session'&&still?'-still':'')+'-'+(dark?'dark':'light')+'.svg';img.alt=name;img.dataset.scene=name;return img;}));}
+main.replaceChildren(...['session','fastfetch','toolbox'].flatMap(name=>{const img=document.createElement('img');
+img.src=name==='toolbox'&&toolbox.value!=='saved'?'toolbox/'+toolbox.value+(compact?'-compact':'')+'-'+(dark?'dark':'light')+'.svg':'../profile/'+name+(compact?'-compact':'')+(name==='session'&&still?'-still':'')+'-'+(dark?'dark':'light')+'.svg';img.alt=name;img.dataset.scene=name;
+return name==='session'?[img,contactRow(dark?'dark':'light')]:name==='fastfetch'?[img,paletteRow(dark?'dark':'light')]:[img];}));}
 theme.onchange=render;layout.onchange=render;toolbox.onchange=render;window.onresize=render;render();
 for(const query of ['(prefers-reduced-motion: reduce)','(prefers-color-scheme: dark)'])matchMedia(query).addEventListener('change',render);
 </script></html>
