@@ -2,13 +2,13 @@ Fiudeus@github ~ $ fastfetch --logo none
 
 Fiudeus@github
 ─────────────────────
-name       Artem                                 uptime     4 years, 228 days
-role       Data Scientist                        repos      9 public / 1 star
-study      Applied AI student                    commits    118 / last 12 months
+name       Artem                                 uptime     4 years, 229 days
+role       Data Scientist                        repos      10 public / 1 star
+study      Applied AI student                    commits    128 / last 12 months
 campus     Kursk State University                prs        23 / issues 20 / 12mo
 focus      ML / data / desktop / Linux           followers  1 / following 7
                                                  streak     2 days / best 18 in 12mo
-                                                 activity   469 contributions / 12mo
+                                                 activity   468 contributions / 12mo
 
-languages  ██████████████████████████████████████████  6 public repos / bytes
-           ● Python 96.6%  ● Jupyter Notebook 2.3%  ● Shell 0.6%  ● other 0.5%
+languages  ██████████████████████████████████████████  7 public repos / bytes
+           ● Python 91.9%  ● Java 4.8%  ● Jupyter Notebook 2.2%  ● other 1.0%
