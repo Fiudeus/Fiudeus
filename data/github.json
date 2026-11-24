@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "login": "Fiudeus",
-  "fetched_at": "2026-11-23T12:29:26.634798Z",
+  "fetched_at": "2026-11-24T13:38:43.662166Z",
   "source": "github-rest-public",
   "created_at": "2022-04-08T14:28:38Z",
   "repos": 10,
@@ -11,9 +11,9 @@
   "commits": 128,
   "prs": 23,
   "issues": 20,
-  "contributions": 468,
-  "period_start": "2025-11-24",
-  "period_end": "2026-11-23",
+  "contributions": 461,
+  "period_start": "2025-11-25",
+  "period_end": "2026-11-24",
   "languages": [
     {
       "name": "Python",
@@ -118,11 +118,6 @@
     }
   ],
   "days": [
-    {
-      "date": "2025-11-24",
-      "count": 7,
-      "level": 3
-    },
     {
       "date": "2025-11-25",
       "count": 0,
@@ -1940,6 +1935,11 @@
     },
     {
       "date": "2026-11-23",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-11-24",
       "count": 0,
       "level": 0
     }
